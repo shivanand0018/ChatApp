@@ -19,6 +19,7 @@ const signupRoutes = require('./routes/signup')
 
 
 app.use('/signup', signupRoutes)
+app.use('/login', loginRoutes)
 
 sequelize.sync().then(() => {
     app.listen(3000)

@@ -1,12 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatApp-Login</title>
+    <link href="/css/signUp.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
+
 <body>
-    
+    <header>
+        <nav class="nav">
+            <div>
+                <h3><i class='far fa-comments' style='font-size:25px;color: red;'></i>ChatApp</h3>
+            </div>
+            <ul class="list">
+                <li class="item" id="item2"><a href="/signUp">SignUp</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form id="form" class="form" method="POST" onsubmit="checkUser(event)">
+            <h2>Sign In</h2>
+            <div class="form-div">
+                <label>Email Id</label>
+                <input type="email" name="email" id="email" required>
+                <label>Password</label>
+                <input type="password" name="password" id="password" required>
+                <button type="submit">Login</button>
+                <p><a href="/password" style="color:blue; cursor: pointer; font-style: italic;">Forgot Password</a></p>
+                <p>Not registered yet? <a href="/signUp" style="color:blue; cursor: pointer;">SignUp</a></p>
+            </div>
+        </form>
+    </main>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="/js/login.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 </html>
