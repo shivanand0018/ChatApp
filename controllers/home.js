@@ -12,21 +12,19 @@ exports.postMsg = async (req, res) => {
         await t.commit();
         res.json({ data: resp })
     }
-    catch(err)
-    {
+    catch (err) {
         await t.rollback()
     }
 }
 
 exports.getMsg = async (req, res) => {
-    const t = await sequelize.transaction();
-    try{
-    const resp = await message.findAll({ where: { userId: req.user.id } })
-    t.commit();
-    res.status(200).json({ data: resp })
+    try {
+        const resp = await message.findAll()
+        const user = await User.findAll();
+        console.log(res);
+        res.json({ data: resp ,users:user,loggedUser:req.user})
     }
-    catch(err)
-    {
-        t.rollback()
+    catch (err) {
+        console.log(err);
     }
 }
