@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatApp-SignUp</title>
+    <link href="/css/signup.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <div>
+                <h3>ChatApp</h3>
+            </div>
+            <ul class="list">
+                <li class="item" id="item2"><a href="/login">SignIn</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form id="form" class="form" method="POST" onsubmit="addUser(event)">
+            <h2>Sign Up</h2>
+            <div class="form-div">
+                <label>Full Name</label>
+                <input type="text" name="userName" id="userName" required>
+                <label>Email Id</label>
+                <input type="email" name="email" id="email" required>
+                <label>Phone Number</label>
+                <input type="number" name="phone" id="phone" required>
+                <label>Password</label>
+                <input type="password" name="password" id="password" required>
+                <label>Re-enter Password</label>
+                <input type="password" name="password" id="re-password" required>
+                <button type="submit">Register</button>
+                <p>Have you already registered? <a href="/login" style="color:blue; cursor: pointer;">Login</a></p>
+            </div>
+        </form>
+    </main>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="/js/signup.js"></script>
+</html>
