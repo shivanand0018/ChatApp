@@ -16,10 +16,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const loginRoutes = require('./routes/login')
 const signupRoutes = require('./routes/signup')
-
+const homeRoutes = require('./routes/home')
 
 app.use('/signup', signupRoutes)
 app.use('/login', loginRoutes)
+app.use('/home', homeRoutes)
 
 sequelize.sync().then(() => {
     app.listen(3000)

@@ -1,0 +1,93 @@
+header {
+    height: 3rem;
+    width: 100%;
+    background-color: darkcyan;
+    font-family: 'Times New Roman', Times, serif
+}
+
+h3 {
+    padding: 0 1.5rem;
+    text-decoration: underline;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-shadow: 0 0 10px white;
+    cursor: pointer;
+    color:black
+}
+
+.nav {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.list {
+    display: flex;
+    margin: 0;
+    padding: 0 0;
+    list-style: none;
+}
+
+.item>a {
+    margin: 0;
+    padding: 0;
+    color: white;
+    text-decoration: none;
+}
+
+#item2 {
+    position: absolute;
+    right: 5%;
+    top: 2.5%;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.item a:hover,
+.item a:active,
+.item a:active {
+    color: black;
+    cursor: pointer;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: darkcyan;
+}
+
+input {
+    width:70%;
+    padding: 12px;
+    border: 1px solid black;
+    border-radius: 4px;
+    margin-top: 6px;
+    margin-bottom: 16px; 
+}
+
+form {
+    padding-left: 300px;
+}
+
+button {
+    cursor: pointer;
+    background-color: darkgray;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    border: 1px solid white;
+}
+
+button:hover{
+    background-color: darkslateblue;
+}
+
+
+
+
