@@ -11,7 +11,7 @@ exports.addUser = async (req, res) => {
         const phoneNo = req.body.phone;
         const password = req.body.password;
         const resp = await signUp.findOne({ where: { email: email } })
-        if (resp==null) {
+        if (resp == null) {
             bcrypt.hash(password, 10, async (err, hash) => {
                 if (err) {
                     console.log(err);
@@ -19,14 +19,14 @@ exports.addUser = async (req, res) => {
                 const data = await signUp.create({
                     name: userName,
                     email: email,
-                    phoneNo:phoneNo,
+                    phoneNo: phoneNo,
                     password: hash
                 }, { transaction: t })
                 await t.commit();
                 res.json({ data: data })
             })
         }
-        else{
+        else {
             throw Error;
         }
 

@@ -5,13 +5,13 @@ const cors = require('cors')
 const app = express();
 const bodyparser = require('body-parser')
 const sequelize = require('./util/database')
-const Message=require('./models/message')
-const User=require('./models/signup')
+const Message = require('./models/message')
+const User = require('./models/signup')
 
 app.use(express.json())
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(cors({
-    origin:"*"
+    origin: "*"
 }))
 
 app.use(express.static(path.join(__dirname, 'public')))

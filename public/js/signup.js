@@ -17,7 +17,7 @@ async function addUser(e) {
                 const obj = {
                     name: userName.value,
                     email: email.value,
-                    phone:phone.value,
+                    phone: phone.value,
                     password: password.value
                 }
                 const response = await axios.post('http://localhost:3000/signup/addUser', obj)

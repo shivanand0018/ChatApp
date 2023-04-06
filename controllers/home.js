@@ -1,6 +1,7 @@
 const message = require('../models/message');
 const User = require("../models/signup");
 const sequelize = require('../util/database');
+const { Op } = require("sequelize");
 
 exports.postMsg = async (req, res) => {
     const t = await sequelize.transaction();
@@ -19,10 +20,12 @@ exports.postMsg = async (req, res) => {
 
 exports.getMsg = async (req, res) => {
     try {
-        const resp = await message.findAll()
+        let id=req.params.id
+        const resp = await message.findAll({where:{id:{[Op.gt]:id}}})
+        console.log(resp);
         const user = await User.findAll();
         console.log(res);
-        res.json({ data: resp ,users:user,loggedUser:req.user})
+        res.json({ data: resp, users: user, loggedUser: req.user })
     }
     catch (err) {
         console.log(err);
