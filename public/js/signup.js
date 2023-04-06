@@ -13,7 +13,6 @@ async function addUser(e) {
         else {
             e.preventDefault();
             if (password.value == repassword.value) {
-
                 const obj = {
                     name: userName.value,
                     email: email.value,

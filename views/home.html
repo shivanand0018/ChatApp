@@ -20,12 +20,34 @@
             </ul>
         </nav>
     </header>
+    <div class="sidenav" id="sidenav">
+        <a id="newGroup" onclick="popup()" style="cursor: pointer;">Add New Group</a>
+        <hr>
+    </div>
+    <div id="popup">
+        <form id="form-container" onsubmit="createGroup(event)">
+            <h2>Create Group</h2>
+            <label>Group Name</label>
+            <input type="text" required>
+            <button>create</button>
+        </form>
+    </div>
+    <div style="float: right;">
+        <button style="background-color: darkslateblue;" onclick="showParticipants()">Add Members to the Group</button>
+        <div id="message"></div>
+        <form style="display: none;" id="partcipants" onsubmit="addToGroup(event)">
+            <select style="width: 100%;" id="select">
+                <option id="addMembers" hidden>select</option>
+            </select>
+            <button>Add</button>
+        </form>
+    </div>
     <main>
         <p id="div">
         </p>
     </main>
     <footer>
-        <form onsubmit="postText(event)">
+        <form onsubmit="postText(event)" id="form1">
             <input type="text" id="text" placeholder="Type your message here...">
             <button type="submit">Send</button>
         </form>

@@ -10,6 +10,14 @@ router.get('/', (req, res, next) => {
 
 router.post('/sendMsg', userAuth.authenticate, controller.postMsg)
 
-router.get('/getMsg/:id', userAuth.authenticate, controller.getMsg)
+router.get('/getMsg/:groupId/:id', userAuth.authenticate, controller.getMsg)
+
+router.post('/createGroup',userAuth.authenticate, controller.createGroup)
+
+router.post('/addToGroup',userAuth.authenticate, controller.addToGroup)
+
+router.get('/getGroups',userAuth.authenticate, controller.getGroups)
+
+router.get('/getMembers',userAuth.authenticate, controller.getMembers)
 
 module.exports = router

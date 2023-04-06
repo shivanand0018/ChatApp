@@ -2,7 +2,8 @@ header {
     height: 3rem;
     width: 100%;
     background-color: darkcyan;
-    font-family: 'Times New Roman', Times, serif
+    font-family: 'Times New Roman', Times, serif;
+    border-bottom: 2px solid black;
 }
 
 h3 {
@@ -11,7 +12,7 @@ h3 {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-shadow: 0 0 10px white;
     cursor: pointer;
-    color:black
+    color: black
 }
 
 .nav {
@@ -59,18 +60,19 @@ footer {
     width: 100%;
     height: 60px;
     background: darkcyan;
+    border-top: 2px solid black;
 }
 
 input {
-    width:70%;
+    width: 70%;
     padding: 12px;
     border: 1px solid black;
     border-radius: 4px;
     margin-top: 6px;
-    margin-bottom: 16px; 
+    margin-bottom: 16px;
 }
 
-form {
+#form1 {
     padding-left: 300px;
 }
 
@@ -84,7 +86,7 @@ button {
     border: 1px solid white;
 }
 
-button:hover{
+button:hover {
     background-color: darkslateblue;
 }
 
@@ -94,10 +96,50 @@ button:hover{
     border-radius: 15px 50px;
 }
 
-#div{
+#div {
     max-width: 800px;
     margin: 20px auto;
     margin-bottom: 2cm;
 }
 
+.sidenav {
+    height: 80.5%;
+    width: 165px;
+    position: fixed;
+    z-index: 1;
+    top: 3rem;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
 
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    cursor: pointer;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+#popup{
+    display: none;
+    position: fixed;
+    top: 10;
+    left: 12%;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    
+}
+
+#form-container {
+    max-width: 380px;
+    padding: 10px;
+    background-color: grey;
+    color: white;
+  }
