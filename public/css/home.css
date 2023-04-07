@@ -90,15 +90,15 @@ button:hover {
     background-color: darkslateblue;
 }
 
-#div>div:nth-of-type(odd) {
+#div>div:nth-of-type(even) {
     background: grey;
     padding: 0.5px;
     border-radius: 15px 50px;
 }
 
 #div {
-    max-width: 800px;
-    margin: 20px auto;
+    max-width: 700px;
+    margin: 40px auto;
     margin-bottom: 2cm;
 }
 
@@ -127,14 +127,14 @@ button:hover {
     color: #f1f1f1;
 }
 
-#popup{
+#popup {
     display: none;
     position: fixed;
     top: 10;
     left: 12%;
     border: 3px solid #f1f1f1;
     z-index: 9;
-    
+
 }
 
 #form-container {
@@ -142,4 +142,4 @@ button:hover {
     padding: 10px;
     background-color: grey;
     color: white;
-  }
+}

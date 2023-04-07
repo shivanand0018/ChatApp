@@ -18,6 +18,10 @@ router.post('/addToGroup',userAuth.authenticate, controller.addToGroup)
 
 router.get('/getGroups',userAuth.authenticate, controller.getGroups)
 
-router.get('/getMembers',userAuth.authenticate, controller.getMembers)
+router.get('/getMembers/:groupId',userAuth.authenticate, controller.getMembers)
+
+router.get('/getMember/:id',userAuth.authenticate, controller.getMember)
+
+router.delete('/removeFromGroup/:groupId/:id',userAuth.authenticate, controller.removeFromGroup)
 
 module.exports = router

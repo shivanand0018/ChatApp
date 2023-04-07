@@ -12,7 +12,7 @@ async function postText(e) {
         }
         let data = await axios.post('http://localhost:3000/home/sendMsg', obj, { headers: { "Authorization": token } })
         text.value = ""
-        //retrieveText(data)
+        retrieveText(data)
     }
     catch (err) {
         console.log(err);
@@ -110,10 +110,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 })
 
-
-
 function getGroup(data) {
-    console.log(data);
     let btn = document.getElementById('sidenav')
     let btn1 = document.createElement('a')
     btn1.innerHTML = data.groupName
@@ -121,9 +118,18 @@ function getGroup(data) {
     btn.appendChild(btn1)
     btn1.onclick = () => {
         console.log(btn1.value);
-        groupId = btn1.value
-        
+        groupId = btn1.value;
+        if (data.userGroups.admin == true) {
+            document.getElementById("addButton").style.display = "block"
+            document.getElementById("removeButton").style.display = "block"
+        }
+        if (data.userGroups.admin == false) {
+            document.getElementById("addButton").style.display = "none"
+            document.getElementById("removeButton").style.display = "none"
+        }
         localStorage.removeItem('messages')
+        document.getElementById('partcipants').style.display = "none"
+        document.getElementById('partcipant').style.display = "none"
         lastId = undefined
     }
 }
@@ -139,10 +145,10 @@ function popup() {
 
 async function createGroup(e) {
     try {
-        e.preventDefault()
-        console.log(e.target[0].value);
+        e.preventDefault();
         let obj = {
-            groupname: e.target[0].value
+            groupname: e.target[0].value,
+            admin: true
         }
         document.getElementById("popup").style.display = "none";
         let data = await axios.post('http://localhost:3000/home/createGroup', obj, { headers: { "Authorization": token } })
@@ -154,20 +160,56 @@ async function createGroup(e) {
 }
 
 async function showParticipants() {
+    var btn = document.getElementById('select')
+    while (btn.firstChild) {
+        btn.removeChild(btn.firstChild);
+    }
     if (document.getElementById('partcipants').style.display == "block") {
         document.getElementById('partcipants').style.display = "none"
+
     }
     else {
         document.getElementById('partcipants').style.display = "block"
-        const data = await axios.get(`http://localhost:3000/home/getMembers`, { headers: { "Authorization": token } })
-        console.log(data.data);
-        let btn = document.getElementById('select')
+        const data = await axios.get(`http://localhost:3000/home/getMembers/${groupId}`, { headers: { "Authorization": token } })
         for (let i = 0; i < data.data.data.length; i++) {
-            let btn1 = document.createElement('option')
+            var btn1 = document.createElement('option')
             btn1.innerHTML = data.data.data[i].name
             btn1.value = data.data.data[i].id
             btn.appendChild(btn1)
         }
+    }
+}
+
+async function showParticipant() {
+    var btn = document.getElementById('select1')
+    while (btn.firstChild) {
+        btn.removeChild(btn.firstChild);
+    }
+    if (document.getElementById('partcipant').style.display == "block") {
+        document.getElementById('partcipant').style.display = "none"
+    }
+    else {
+        document.getElementById('partcipant').style.display = "block"
+        const data = await axios.get(`http://localhost:3000/home/getMember/${groupId}`, { headers: { "Authorization": token } })
+        for (let i = 0; i < data.data.data[0].users.length; i++) {
+            var btn1 = document.createElement('option')
+            btn1.innerHTML = data.data.data[0].users[i].name
+            btn1.value = data.data.data[0].users[i].id
+            btn.appendChild(btn1)
+        }
+    }
+}
+
+async function removeFromGroup(e) {
+    try {
+        e.preventDefault();
+        document.getElementById('partcipant').style.display = "none"
+        let data = await axios.delete(`http://localhost:3000/home/removeFromGroup/${groupId}/${e.target[0].value}`, { headers: { "Authorization": token } })
+        let text = '<div><p style="color:red;text-align:center">Member removed from the group successfully..!</p></div>'
+        table.innerHTML = table.innerHTML + text
+    }
+    catch (err) {
+        console.log(err);
     }
 }
 
@@ -176,20 +218,17 @@ async function addToGroup(e) {
         e.preventDefault();
         let obj = {
             userId: e.target[0].value,
-            groupId: groupId
+            groupId: groupId,
+            admin: e.target[1].checked
         }
         document.getElementById('partcipants').style.display = "none"
-        console.log(obj);
         let data = await axios.post('http://localhost:3000/home/addToGroup', obj, { headers: { "Authorization": token } })
-        console.log(data);
-        let message = `Member added to the group <br>successfully..!`
-        let btn = document.createElement('p')
-        btn.style.color = 'red'
-        btn.innerHTML = message
-        let btn1 = document.getElementById('message')
-        btn1.appendChild(btn)
+        let text = '<div><p style="color:red;text-align:center">Member added to the group successfully..!</p></div>'
+        table.innerHTML = table.innerHTML + text
     }
     catch (err) {
         console.log(err);
+        let text = '<div><p style="color:red;text-align:center">Member is already added to the group..!</p></div>'
+        table.innerHTML = table.innerHTML + text
     }
 }

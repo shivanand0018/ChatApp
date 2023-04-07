@@ -10,6 +10,10 @@ const userGroups = sequelize.define('userGroups', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    admin:{
+        type:Sequelize.BOOLEAN,
+        defaultValue:false
+    }
 })
 
 module.exports = userGroups;

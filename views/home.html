@@ -33,12 +33,24 @@
         </form>
     </div>
     <div style="float: right;">
-        <button style="background-color: darkslateblue;" onclick="showParticipants()">Add Members to the Group</button>
-        <div id="message"></div>
-        <form style="display: none;" id="partcipants" onsubmit="addToGroup(event)">
-            <select style="width: 100%;" id="select">
-                <option id="addMembers" hidden>select</option>
+        <button style="background-color: red;display: none;" onclick="showParticipant()" id="removeButton">Remove
+            Members from the Group</button>
+        <form style="display: none;" id="partcipant" onsubmit="removeFromGroup(event)">
+            <select style="width: 100%;" id="select1">
+                <option id="removeMembers" hidden>select</option>
             </select>
+            <button>Remove</button>
+        </form>
+    </div>
+    <div style="position: absolute;left: 12.2%;">
+        <button style="background-color: darkslateblue;display: none;" onclick="showParticipants()" id="addButton">Add
+            Members to the Group</button>
+        <form style="display: none;background-color: grey;" id="partcipants" onsubmit="addToGroup(event)">
+            <select style="width: 100%;" id="select">
+                <option id="addMembers" hidden>Select</option>
+            </select>
+            <input style="width: 10%;" type="checkbox" name="admin" checked="true">
+            <label for="admin">Make admin</label><br>
             <button>Add</button>
         </form>
     </div>
@@ -46,6 +58,8 @@
         <p id="div">
         </p>
     </main>
+
+
     <footer>
         <form onsubmit="postText(event)" id="form1">
             <input type="text" id="text" placeholder="Type your message here...">
