@@ -24,4 +24,6 @@ router.get('/getMember/:id',userAuth.authenticate, controller.getMember)
 
 router.delete('/removeFromGroup/:groupId/:id',userAuth.authenticate, controller.removeFromGroup)
 
+router.get('/getMsgData/:id',userAuth.authenticate, controller.getMsgData)
+
 module.exports = router

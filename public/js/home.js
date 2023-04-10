@@ -1,21 +1,45 @@
+let socket = io()
 const table = document.getElementById('div');
 const text = document.getElementById('text')
 const token = localStorage.getItem('token')
 var groupId;
 
+
+socket.emit("generategroup", 'room');
+
 async function postText(e) {
+    e.preventDefault();
     try {
-        e.preventDefault();
         let obj = {
             text: text.value,
             groupId: groupId
         }
+        let text1 = text.value
         let data = await axios.post('http://localhost:3000/home/sendMsg', obj, { headers: { "Authorization": token } })
+        console.log(data);
+        console.log(socket.emit("chatMessage", text1, data.data.data.id, data.data.data.userId, data.data.data1.id, data.data.data1.name));
         text.value = ""
-        retrieveText(data)
+        //retrieveText(data)
     }
     catch (err) {
         console.log(err);
+    }
+}
+
+socket.on("message", (obj) => {
+    console.log(obj);
+    retrieveTexts(obj)
+})
+
+async function retrieveTexts(obj) {
+    const resp = await axios.get(`http://localhost:3000/home/getMsgData/${obj.id}`, { headers: { "Authorization": token } })
+    if (obj.userId != resp.data.data.id) {
+        let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:${obj.msg}</p></div>`
+        table.innerHTML = table.innerHTML + text;
+    }
+    if (obj.userId == resp.data.data.id) {
+        let text = `<div><p id=${obj.id} style="margin:10px 10px">You:${obj.msg}</p></div>`
+        table.innerHTML = table.innerHTML + text;
     }
 }
 
@@ -44,7 +68,7 @@ function retrieveText(res) {
 
 var lastId;
 
-setInterval(async function getMsgs() {
+async function getMsgs() {
     try {
         console.log(groupId);
         if (lastId == undefined) {
@@ -76,7 +100,9 @@ setInterval(async function getMsgs() {
     catch (err) {
         console.log(err);
     }
-}, 1000)
+}
+
+
 
 window.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -110,6 +136,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 })
 
+console.log(groupId);
 function getGroup(data) {
     let btn = document.getElementById('sidenav')
     let btn1 = document.createElement('a')
@@ -130,7 +157,9 @@ function getGroup(data) {
         localStorage.removeItem('messages')
         document.getElementById('partcipants').style.display = "none"
         document.getElementById('partcipant').style.display = "none"
+
         lastId = undefined
+        getMsgs();
     }
 }
 

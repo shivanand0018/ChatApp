@@ -5,6 +5,8 @@ const userGroup = require("../models/userGroup")
 const sequelize = require('../util/database');
 const { Op } = require("sequelize");
 
+
+
 exports.postMsg = async (req, res) => {
     const t = await sequelize.transaction();
     try {
@@ -14,7 +16,7 @@ exports.postMsg = async (req, res) => {
             groupId: req.body.groupId
         })
         await t.commit();
-        res.json({ data: resp })
+        res.json({ data: resp, data1: req.user })
     }
     catch (err) {
         await t.rollback()
@@ -120,5 +122,17 @@ exports.removeFromGroup = async (req, res) => {
     }
     catch (err) {
         t.rollback();
+    }
+}
+
+exports.getMsgData = async (req, res) => {
+    try {
+        const user = await User.findOne({
+            where: { id: req.user.id }
+        })
+        res.json({ data: user })
+    }
+    catch (err) {
+        console.log(err);
     }
 }
