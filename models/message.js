@@ -9,6 +9,9 @@ const Message = sequelize.define('messages', {
     },
     text: {
         type: Sequelize.STRING,
+    },
+    imageUrl:{
+        type:Sequelize.STRING
     }
 })
 

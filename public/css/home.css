@@ -63,7 +63,7 @@ footer {
     border-top: 2px solid black;
 }
 
-input {
+#text {
     width: 70%;
     padding: 12px;
     border: 1px solid black;
@@ -73,7 +73,7 @@ input {
 }
 
 #form1 {
-    padding-left: 300px;
+    padding-left: 150px;
 }
 
 button {

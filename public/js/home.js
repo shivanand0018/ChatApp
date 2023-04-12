@@ -1,6 +1,7 @@
 let socket = io()
 const table = document.getElementById('div');
 const text = document.getElementById('text')
+const file = document.getElementById('uploadFileInput')
 const token = localStorage.getItem('token')
 var groupId;
 
@@ -12,14 +13,22 @@ async function postText(e) {
     try {
         let obj = {
             text: text.value,
-            groupId: groupId
+            groupId: groupId,
+            file: file.value
         }
         let text1 = text.value
-        let data = await axios.post('http://localhost:3000/home/sendMsg', obj, { headers: { "Authorization": token } })
-        console.log(data);
-        console.log(socket.emit("chatMessage", text1, data.data.data.id, data.data.data.userId, data.data.data1.id, data.data.data1.name));
-        text.value = ""
-        //retrieveText(data)
+        if (file.value == "") {
+            let data = await axios.post('http://localhost:3000/home/sendMsg', obj, { headers: { "Authorization": token } })
+            socket.emit("chatMessage", text1, "", data.data.data.id, data.data.data.userId, data.data.data1.id, data.data.data1.name);
+            text.value = ""
+        }
+        else if (text.value == "") {
+            let text1 = "image"
+            let data = await axios.post('http://localhost:3000/home/uploadFile', obj, { headers: { "Authorization": token } })
+            console.log(data);
+            socket.emit("chatMessage", "", data.data.data.imageUrl, data.data.data.id, data.data.data.userId, data.data.data1.id, data.data.data1.name);
+            file.value = ""
+        }
     }
     catch (err) {
         console.log(err);
@@ -27,19 +36,30 @@ async function postText(e) {
 }
 
 socket.on("message", (obj) => {
-    console.log(obj);
     retrieveTexts(obj)
 })
 
 async function retrieveTexts(obj) {
     const resp = await axios.get(`http://localhost:3000/home/getMsgData/${obj.id}`, { headers: { "Authorization": token } })
     if (obj.userId != resp.data.data.id) {
-        let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:${obj.msg}</p></div>`
-        table.innerHTML = table.innerHTML + text;
+        if (obj.url = "") {
+            let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:${obj.msg}</p></div>`
+            table.innerHTML = table.innerHTML + text;
+        }
+        else {
+            let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:<a href="${obj.url}">image</a></p></div>`
+            table.innerHTML = table.innerHTML + text;
+        }
     }
     if (obj.userId == resp.data.data.id) {
-        let text = `<div><p id=${obj.id} style="margin:10px 10px">You:${obj.msg}</p></div>`
-        table.innerHTML = table.innerHTML + text;
+        if (obj.url = "") {
+            let text = `<div><p id=${obj.id} style="margin:10px 10px">You:${obj.msg}</p></div>`
+            table.innerHTML = table.innerHTML + text;
+        }
+        else {
+            let text = `<div><p id=${obj.id} style="margin:10px 10px">You:<a href="${obj.url}" download>image</a></p></div>`
+            table.innerHTML = table.innerHTML + text;
+        }
     }
 }
 
@@ -50,8 +70,14 @@ function retrieveText(res) {
     table.innerHTML = ""
     for (let i = 0; i < storedMsgs.length; i++) {
         if (res.data.loggedUser.id == storedMsgs[i].userId) {
-            let text = `<div><p id=${storedMsgs[i].id} style="margin:10px;">You:${storedMsgs[i].text}</p></div>`
-            table.innerHTML = table.innerHTML + text;
+            if (storedMsgs[i].imageUrl == "") {
+                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px;">You:${storedMsgs[i].text}</p></div>`
+                table.innerHTML = table.innerHTML + text;
+            }
+            else {
+                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px;">You:<a href="${storedMsgs[i].imageUrl}"download>image</a></p></div>`
+                table.innerHTML = table.innerHTML + text;
+            }
         }
         else {
             let id = storedMsgs[i].userId
@@ -60,8 +86,14 @@ function retrieveText(res) {
                     var name = res.data.users[j].name
                 }
             }
-            let text = `<div><p id=${storedMsgs[i].id} style="margin:10px 10px;text-align:right">${name}:${storedMsgs[i].text}</p></div>`
-            table.innerHTML = table.innerHTML + text;
+            if (storedMsgs[i].imageUrl == "") {
+                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px 10px;text-align:right">${name}:${storedMsgs[i].text}</p></div>`
+                table.innerHTML = table.innerHTML + text;
+            }
+            else{
+                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px 10px;text-align:right">${name}:<a href="${storedMsgs[i].imageUrl}"download>image</a></p></div>`
+                table.innerHTML = table.innerHTML + text;
+            }
         }
     }
 }
@@ -76,8 +108,20 @@ async function getMsgs() {
             table.innerHTML = ""
             const res = await axios.get(`http://localhost:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
             lastId = res.data.data[res.data.data.length - 1].id
-            localStorage.setItem('messages', JSON.stringify(res.data.data))
-            retrieveText(res)
+            let j = 0
+            let data1 = []
+            if (res.data.data.length > 13) {
+                for (let i = res.data.data.length - 13; i < res.data.data.length; i++) {
+                    data1[j] = res.data.data[i]
+                    j++
+                }
+                localStorage.setItem('messages', JSON.stringify(data1))
+                retrieveText(res)
+            }
+            else {
+                localStorage.setItem('messages', JSON.stringify(res.data.data))
+                retrieveText(res)
+            }
         }
         else {
             const resp = await axios.get(`http://localhost:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
@@ -101,8 +145,6 @@ async function getMsgs() {
         console.log(err);
     }
 }
-
-
 
 window.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -142,6 +184,7 @@ function getGroup(data) {
     let btn1 = document.createElement('a')
     btn1.innerHTML = data.groupName
     btn1.value = data.id;
+    console.log(data);
     btn.appendChild(btn1)
     btn1.onclick = () => {
         console.log(btn1.value);
@@ -157,7 +200,6 @@ function getGroup(data) {
         localStorage.removeItem('messages')
         document.getElementById('partcipants').style.display = "none"
         document.getElementById('partcipant').style.display = "none"
-
         lastId = undefined
         getMsgs();
     }

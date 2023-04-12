@@ -4,7 +4,7 @@ const Group = require("../models/groups")
 const userGroup = require("../models/userGroup")
 const sequelize = require('../util/database');
 const { Op } = require("sequelize");
-
+const s3Service = require('../services/s3Service')
 
 
 exports.postMsg = async (req, res) => {
@@ -133,6 +133,31 @@ exports.getMsgData = async (req, res) => {
         res.json({ data: user })
     }
     catch (err) {
+        console.log(err);
+    }
+}
+
+exports.postUploadFile = async (req, res) => {
+    try{
+        console.log(req);
+        const userId = req.user.id;
+        const groupId = req.body.groupId;
+        const file =req.body.file
+        console.log(req.body);
+        const date = new Date();
+        const fileName = `Photo_${date}_${userId}_${groupId}_${file}`;
+        
+        const fileURL = await s3Service.uploadToS3(file, fileName);
+
+        const chat = await message.create({
+            imageUrl: fileURL,
+            userId,
+            groupId,
+        });
+        res.json({data:chat,data1: req.user})
+    }
+    catch(err)
+    {
         console.log(err);
     }
 }

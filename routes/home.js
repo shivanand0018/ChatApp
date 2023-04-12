@@ -12,18 +12,20 @@ router.post('/sendMsg', userAuth.authenticate, controller.postMsg)
 
 router.get('/getMsg/:groupId/:id', userAuth.authenticate, controller.getMsg)
 
-router.post('/createGroup',userAuth.authenticate, controller.createGroup)
+router.post('/createGroup', userAuth.authenticate, controller.createGroup)
 
-router.post('/addToGroup',userAuth.authenticate, controller.addToGroup)
+router.post('/addToGroup', userAuth.authenticate, controller.addToGroup)
 
-router.get('/getGroups',userAuth.authenticate, controller.getGroups)
+router.get('/getGroups', userAuth.authenticate, controller.getGroups)
 
-router.get('/getMembers/:groupId',userAuth.authenticate, controller.getMembers)
+router.get('/getMembers/:groupId', userAuth.authenticate, controller.getMembers)
 
-router.get('/getMember/:id',userAuth.authenticate, controller.getMember)
+router.get('/getMember/:id', userAuth.authenticate, controller.getMember)
 
-router.delete('/removeFromGroup/:groupId/:id',userAuth.authenticate, controller.removeFromGroup)
+router.delete('/removeFromGroup/:groupId/:id', userAuth.authenticate, controller.removeFromGroup)
 
-router.get('/getMsgData/:id',userAuth.authenticate, controller.getMsgData)
+router.get('/getMsgData/:id', userAuth.authenticate, controller.getMsgData)
+
+router.post('/uploadFile', userAuth.authenticate, controller.postUploadFile);
 
 module.exports = router

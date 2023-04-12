@@ -15,6 +15,7 @@ const { Server } = require('socket.io');
 const http = require('http');
 const server = http.createServer(app);
 const io = new Server(server);
+require('dotenv').config();
 
 app.use(express.json())
 app.use(bodyparser.urlencoded({ extended: false }))
@@ -32,10 +33,11 @@ io.on("connection", socket => {
         socket.join(room)
     })
 
-    socket.on("chatMessage", (msg,id,userId,loggedUserId,name) => {
+    socket.on("chatMessage", (msg,url,id,userId,loggedUserId,name) => {
         console.log(msg+"here"+id);
         let obj={
             msg:msg,
+            url:url,
             id:id,
             userId:userId,
             loggedUserId:loggedUserId,
