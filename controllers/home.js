@@ -105,7 +105,6 @@ exports.getMember = async (req, res) => {
                 where: { id: { [Op.ne]: req.user.id } }
             }]
         })
-        console.log(data);
         res.json({ data: data })
     }
     catch (err) {
@@ -138,26 +137,21 @@ exports.getMsgData = async (req, res) => {
 }
 
 exports.postUploadFile = async (req, res) => {
-    try{
-        console.log(req);
+    try {
         const userId = req.user.id;
         const groupId = req.body.groupId;
-        const file =req.body.file
-        console.log(req.body);
+        const file = req.body.file
         const date = new Date();
         const fileName = `Photo_${date}_${userId}_${groupId}_${file}`;
-        
         const fileURL = await s3Service.uploadToS3(file, fileName);
-
         const chat = await message.create({
             imageUrl: fileURL,
             userId,
             groupId,
         });
-        res.json({data:chat,data1: req.user})
+        res.json({ data: chat, data1: req.user })
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }

@@ -18,14 +18,12 @@ async function postText(e) {
         }
         let text1 = text.value
         if (file.value == "") {
-            let data = await axios.post('http://localhost:3000/home/sendMsg', obj, { headers: { "Authorization": token } })
+            let data = await axios.post('http://54.160.107.218:3000/home/sendMsg', obj, { headers: { "Authorization": token } })
             socket.emit("chatMessage", text1, "", data.data.data.id, data.data.data.userId, data.data.data1.id, data.data.data1.name);
             text.value = ""
         }
         else if (text.value == "") {
-            let text1 = "image"
-            let data = await axios.post('http://localhost:3000/home/uploadFile', obj, { headers: { "Authorization": token } })
-            console.log(data);
+            let data = await axios.post('http://54.160.107.218:3000/home/uploadFile', obj, { headers: { "Authorization": token } })
             socket.emit("chatMessage", "", data.data.data.imageUrl, data.data.data.id, data.data.data.userId, data.data.data1.id, data.data.data1.name);
             file.value = ""
         }
@@ -40,42 +38,42 @@ socket.on("message", (obj) => {
 })
 
 async function retrieveTexts(obj) {
-    const resp = await axios.get(`http://localhost:3000/home/getMsgData/${obj.id}`, { headers: { "Authorization": token } })
+    const resp = await axios.get(`http://54.160.107.218:3000/home/getMsgData/${obj.id}`, { headers: { "Authorization": token } })
+    console.log(obj);
     if (obj.userId != resp.data.data.id) {
-        if (obj.url = "") {
+        if (obj.url == "") {
             let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:${obj.msg}</p></div>`
             table.innerHTML = table.innerHTML + text;
         }
-        else {
-            let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:<a href="${obj.url}">image</a></p></div>`
+        else if (obj.msg == "") {
+            let text = `<div><p id=${obj.id} style="margin:10px 10px;text-align:right">${resp.data.data.name}:<a href="${obj.url}">file</a></p></div>`
             table.innerHTML = table.innerHTML + text;
         }
     }
     if (obj.userId == resp.data.data.id) {
-        if (obj.url = "") {
+        if (obj.url == "") {
             let text = `<div><p id=${obj.id} style="margin:10px 10px">You:${obj.msg}</p></div>`
             table.innerHTML = table.innerHTML + text;
         }
-        else {
-            let text = `<div><p id=${obj.id} style="margin:10px 10px">You:<a href="${obj.url}" download>image</a></p></div>`
+        else if (obj.msg == "") {
+            let text = `<div><p id=${obj.id} style="margin:10px 10px">You:<a href="${obj.url}" download>file</a></p></div>`
             table.innerHTML = table.innerHTML + text;
         }
     }
 }
 
 function retrieveText(res) {
-    let data1 = res.data.data
-    console.log(data1);
     var storedMsgs = JSON.parse(localStorage.messages);
+    console.log(storedMsgs);
     table.innerHTML = ""
     for (let i = 0; i < storedMsgs.length; i++) {
         if (res.data.loggedUser.id == storedMsgs[i].userId) {
-            if (storedMsgs[i].imageUrl == "") {
+            if (storedMsgs[i].imageUrl == null) {
                 let text = `<div><p id=${storedMsgs[i].id} style="margin:10px;">You:${storedMsgs[i].text}</p></div>`
                 table.innerHTML = table.innerHTML + text;
             }
-            else {
-                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px;">You:<a href="${storedMsgs[i].imageUrl}"download>image</a></p></div>`
+            else if (storedMsgs[i].text == null) {
+                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px;">You:<a href="${storedMsgs[i].imageUrl}"download>file</a></p></div>`
                 table.innerHTML = table.innerHTML + text;
             }
         }
@@ -86,12 +84,12 @@ function retrieveText(res) {
                     var name = res.data.users[j].name
                 }
             }
-            if (storedMsgs[i].imageUrl == "") {
+            if (storedMsgs[i].imageUrl == null) {
                 let text = `<div><p id=${storedMsgs[i].id} style="margin:10px 10px;text-align:right">${name}:${storedMsgs[i].text}</p></div>`
                 table.innerHTML = table.innerHTML + text;
             }
-            else{
-                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px 10px;text-align:right">${name}:<a href="${storedMsgs[i].imageUrl}"download>image</a></p></div>`
+            else if (storedMsgs[i].text == null) {
+                let text = `<div><p id=${storedMsgs[i].id} style="margin:10px 10px;text-align:right">${name}:<a href="${storedMsgs[i].imageUrl}"download>file</a></p></div>`
                 table.innerHTML = table.innerHTML + text;
             }
         }
@@ -102,11 +100,10 @@ var lastId;
 
 async function getMsgs() {
     try {
-        console.log(groupId);
         if (lastId == undefined) {
             lastId = -1
             table.innerHTML = ""
-            const res = await axios.get(`http://localhost:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
+            const res = await axios.get(`http://54.160.107.218:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
             lastId = res.data.data[res.data.data.length - 1].id
             let j = 0
             let data1 = []
@@ -124,7 +121,7 @@ async function getMsgs() {
             }
         }
         else {
-            const resp = await axios.get(`http://localhost:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
+            const resp = await axios.get(`http://54.160.107.218:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
             lastId = resp.data.data[resp.data.data.length - 1].id
             var a = [];
             a = JSON.parse(localStorage.getItem('messages'))
@@ -148,14 +145,14 @@ async function getMsgs() {
 
 window.addEventListener('DOMContentLoaded', async () => {
     try {
-        const groups = await axios.get(`http://localhost:3000/home/getGroups`, { headers: { "Authorization": token } })
+        const groups = await axios.get(`http://54.160.107.218:3000/home/getGroups`, { headers: { "Authorization": token } })
         for (let i = 0; i < groups.data.data[0].groups.length; i++) {
             getGroup(groups.data.data[0].groups[i])
         }
         if (lastId == undefined) {
             lastId = -1
             table.innerHTML = ""
-            const res = await axios.get(`http://localhost:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
+            const res = await axios.get(`http://54.160.107.218:3000/home/getMsg/${groupId}/${lastId}`, { headers: { "Authorization": token } })
             lastId = res.data.data[res.data.data.length - 1].id
             let j = 0
             let data1 = []
@@ -178,22 +175,20 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 })
 
-console.log(groupId);
-function getGroup(data) {
+function getGroup(data, admin) {
     let btn = document.getElementById('sidenav')
     let btn1 = document.createElement('a')
     btn1.innerHTML = data.groupName
     btn1.value = data.id;
-    console.log(data);
     btn.appendChild(btn1)
+    console.log(data.userGroups);
     btn1.onclick = () => {
-        console.log(btn1.value);
         groupId = btn1.value;
-        if (data.userGroups.admin == true) {
+        if (data.userGroups.admin === true) {
             document.getElementById("addButton").style.display = "block"
             document.getElementById("removeButton").style.display = "block"
         }
-        if (data.userGroups.admin == false) {
+        if (data.userGroups.admin === false) {
             document.getElementById("addButton").style.display = "none"
             document.getElementById("removeButton").style.display = "none"
         }
@@ -222,8 +217,8 @@ async function createGroup(e) {
             admin: true
         }
         document.getElementById("popup").style.display = "none";
-        let data = await axios.post('http://localhost:3000/home/createGroup', obj, { headers: { "Authorization": token } })
-        getGroup(data.data.data)
+        let data = await axios.post('http://54.160.107.218:3000/home/createGroup', obj, { headers: { "Authorization": token } })
+        getGroup(data.data.data, admin)
     }
     catch (err) {
         console.log(err);
@@ -241,7 +236,7 @@ async function showParticipants() {
     }
     else {
         document.getElementById('partcipants').style.display = "block"
-        const data = await axios.get(`http://localhost:3000/home/getMembers/${groupId}`, { headers: { "Authorization": token } })
+        const data = await axios.get(`http://54.160.107.218:3000/home/getMembers/${groupId}`, { headers: { "Authorization": token } })
         for (let i = 0; i < data.data.data.length; i++) {
             var btn1 = document.createElement('option')
             btn1.innerHTML = data.data.data[i].name
@@ -261,7 +256,7 @@ async function showParticipant() {
     }
     else {
         document.getElementById('partcipant').style.display = "block"
-        const data = await axios.get(`http://localhost:3000/home/getMember/${groupId}`, { headers: { "Authorization": token } })
+        const data = await axios.get(`http://54.160.107.218:3000/home/getMember/${groupId}`, { headers: { "Authorization": token } })
         for (let i = 0; i < data.data.data[0].users.length; i++) {
             var btn1 = document.createElement('option')
             btn1.innerHTML = data.data.data[0].users[i].name
@@ -275,7 +270,7 @@ async function removeFromGroup(e) {
     try {
         e.preventDefault();
         document.getElementById('partcipant').style.display = "none"
-        let data = await axios.delete(`http://localhost:3000/home/removeFromGroup/${groupId}/${e.target[0].value}`, { headers: { "Authorization": token } })
+        let data = await axios.delete(`http://54.160.107.218:3000/home/removeFromGroup/${groupId}/${e.target[0].value}`, { headers: { "Authorization": token } })
         let text = '<div><p style="color:red;text-align:center">Member removed from the group successfully..!</p></div>'
         table.innerHTML = table.innerHTML + text
     }
@@ -293,7 +288,7 @@ async function addToGroup(e) {
             admin: e.target[1].checked
         }
         document.getElementById('partcipants').style.display = "none"
-        let data = await axios.post('http://localhost:3000/home/addToGroup', obj, { headers: { "Authorization": token } })
+        let data = await axios.post('http://54.160.107.218:3000/home/addToGroup', obj, { headers: { "Authorization": token } })
         let text = '<div><p style="color:red;text-align:center">Member added to the group successfully..!</p></div>'
         table.innerHTML = table.innerHTML + text
     }

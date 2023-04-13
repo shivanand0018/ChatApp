@@ -8,7 +8,7 @@ async function checkUser(e) {
             email: email.value,
             password: password.value
         }
-        let data = await axios.post('http://localhost:3000/login/checkUser', obj)
+        let data = await axios.post('http://54.160.107.218:3000/login/checkUser', obj)
         if (data.status == 200) {
             alert(data.data.data)
             window.location.href = "/home";

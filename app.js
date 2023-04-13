@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
 const cors = require('cors')
-
 const app = express();
 
 const bodyparser = require('body-parser')
@@ -27,23 +26,22 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 io.on("connection", socket => {
     console.log(socket.id);
-    
+
     socket.on('generategroup', (room) => {
         console.log(room + "hi");
         socket.join(room)
     })
 
-    socket.on("chatMessage", (msg,url,id,userId,loggedUserId,name) => {
-        console.log(msg+"here"+id);
-        let obj={
-            msg:msg,
-            url:url,
-            id:id,
-            userId:userId,
-            loggedUserId:loggedUserId,
-            name:name
+    socket.on("chatMessage", (msg, url, id, userId, loggedUserId, name) => {
+        let obj = {
+            msg: msg,
+            url: url,
+            id: id,
+            userId: userId,
+            loggedUserId: loggedUserId,
+            name: name
         }
-        io.emit("message",obj);
+        io.emit("message", obj);
     });
 })
 
