@@ -217,6 +217,7 @@ async function createGroup(e) {
             admin: true
         }
         document.getElementById("popup").style.display = "none";
+        var admin= true;
         let data = await axios.post('http://54.160.107.218:3000/home/createGroup', obj, { headers: { "Authorization": token } })
         getGroup(data.data.data, admin)
     }
